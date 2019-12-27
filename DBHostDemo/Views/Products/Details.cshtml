@@ -1,0 +1,50 @@
+﻿@model DBHostDemo.Models.product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.pName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.pQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.pPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.pRemarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pRemarks)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.pId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
