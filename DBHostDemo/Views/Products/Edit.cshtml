@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>product</h4>
         <hr />
@@ -40,6 +40,13 @@
                 @Html.ValidationMessageFor(model => model.pPrice, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="form-group">
+            @Html.Label("Supplier", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.supplierId, ViewBag.Suppliers as SelectList, new { @class = "form-control" })
+
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.pRemarks, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -51,7 +58,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" id="btnSubmit" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -64,3 +71,31 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script type="text/javascript">
+    $('#btnSubmit').click(function () {
+        var isValid = true;
+        if ($('#pName').val() == "") {
+            $('#pName').css("border-color", "red");
+            isValid = false;
+        }
+        else {
+            $('#pName').css("border-color", "");
+        }
+        if ($('#pQuantity').val() == "") {
+            $('#pQuantity').css("border-color", "red");
+            isValid = false;
+        }
+        else {
+            $('#pQuantity').css("border-color", "");
+        }
+        if ($('#pPrice').val() == "") {
+            $('#pPrice').css("border-color", "red");
+            isValid = false;
+        }
+        else {
+            $('#pPrice').css("border-color", "");
+        }
+        return isValid;
+    })
+</script>

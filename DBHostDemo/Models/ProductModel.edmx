@@ -4,22 +4,49 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DemoHostDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DemoHostDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="product">
           <Key>
             <PropertyRef Name="pId" />
           </Key>
           <Property Name="pId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="pName" Type="varchar" MaxLength="100" />
+          <Property Name="pName" Type="nvarchar(max)" />
           <Property Name="pQuantity" Type="int" />
           <Property Name="pPrice" Type="float" />
-          <Property Name="pRemarks" Type="varchar" MaxLength="100" />
+          <Property Name="pRemarks" Type="nvarchar(max)" />
+          <Property Name="supplierId" Type="int" />
         </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="15" />
+          <Property Name="Email" Type="nvarchar" MaxLength="20" />
+          <Property Name="Location" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK__product__supplie__276EDEB3">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="0..1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="supplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DemoHostDBModelStoreContainer">
           <EntitySet Name="product" EntityType="Self.product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__product__supplie__276EDEB3" Association="Self.FK__product__supplie__276EDEB3">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DemoHostDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -28,14 +55,44 @@
             <PropertyRef Name="pId" />
           </Key>
           <Property Name="pId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="pName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="pQuantity" Type="Int32" />
           <Property Name="pPrice" Type="Double" />
-          <Property Name="pRemarks" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="supplierId" Type="Int32" />
+          <NavigationProperty Name="Supplier" Relationship="DemoHostDBModel.FK__product__supplie__276EDEB3" FromRole="product" ToRole="Supplier" />
         </EntityType>
         <EntityContainer Name="DemoHostDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="products" EntityType="Self.product" />
+          <EntitySet Name="Suppliers" EntityType="DemoHostDBModel.Supplier" />
+          <AssociationSet Name="FK__product__supplie__276EDEB3" Association="DemoHostDBModel.FK__product__supplie__276EDEB3">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="product" EntitySet="products" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="products" Relationship="DemoHostDBModel.FK__product__supplie__276EDEB3" FromRole="Supplier" ToRole="product" />
+        </EntityType>
+        <Association Name="FK__product__supplie__276EDEB3">
+          <End Type="DemoHostDBModel.Supplier" Role="Supplier" Multiplicity="0..1" />
+          <End Type="DemoHostDBModel.product" Role="product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="supplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -45,11 +102,23 @@
           <EntitySetMapping Name="products">
             <EntityTypeMapping TypeName="DemoHostDBModel.product">
               <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="supplierId" ColumnName="supplierId" />
                 <ScalarProperty Name="pId" ColumnName="pId" />
                 <ScalarProperty Name="pName" ColumnName="pName" />
                 <ScalarProperty Name="pQuantity" ColumnName="pQuantity" />
                 <ScalarProperty Name="pPrice" ColumnName="pPrice" />
                 <ScalarProperty Name="pRemarks" ColumnName="pRemarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="DemoHostDBModel.Supplier">
+              <MappingFragment StoreEntitySet="Suppliers">
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

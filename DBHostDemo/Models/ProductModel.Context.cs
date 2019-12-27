@@ -22,10 +22,10 @@ namespace DBHostDemo.Models
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //throw new UnintentionalCodeFirstException();
-            modelBuilder.Entity<product>().ToTable("product", "pitchika");
+            throw new UnintentionalCodeFirstException();
         }
     
         public virtual DbSet<product> products { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
     }
 }

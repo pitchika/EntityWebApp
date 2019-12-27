@@ -19,5 +19,8 @@ namespace DBHostDemo.Models
         public Nullable<int> pQuantity { get; set; }
         public Nullable<double> pPrice { get; set; }
         public string pRemarks { get; set; }
+        public Nullable<int> supplierId { get; set; }
+    
+        public virtual Supplier Supplier { get; set; }
     }
 }

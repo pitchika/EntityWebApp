@@ -6,6 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="7c55e1b815ab4cd7b6d60d8c79d4a6ec" Name="Diagram1">
         <EntityTypeShape EntityType="DemoHostDBModel.product" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DemoHostDBModel.Supplier" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="DemoHostDBModel.FK__product__supplie__276EDEB3" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
